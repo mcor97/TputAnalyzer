@@ -2,7 +2,7 @@ import numpy
 import pandas
 import time
 
-class TputCalculator :
+class TputManager :
     summaryInfoFrame = pandas.DataFrame()
     summaryInfoList = []
 
@@ -16,10 +16,10 @@ class TputCalculator :
         return data
 
     def create_summary_info_frame(self):
-        TputCalculator.summaryInfoFrame = pandas.DataFrame(columns = ('CallCount', 'StartTime', 'EndTime', 'Throughput', 'Temperature_Min', 'Temperature_Avg','Temperature_Max'))
+        TputManager.summaryInfoFrame = pandas.DataFrame(columns = ('CallCount', 'StartTime', 'EndTime', 'Throughput', 'Temperature_Min', 'Temperature_Avg','Temperature_Max'))
 
     def get_summary_info_frame(self):
-        return TputCalculator.summaryInfoFrame
+        return TputManager.summaryInfoFrame
 
     def make_summary_info_list(self, dataFrame):
         
@@ -40,8 +40,8 @@ class TputCalculator :
 
             ##graph.create_line_graph(newDataFrame, newDataFrame.Time, newDataFrame.Throughput, newDataFrame.Time, newDataFrame.Temperature)
             ##print(newDataFrame['Throughput'])
-            TputCalculator.summaryInfoList.append(newDataFrame)
-        return TputCalculator.summaryInfoList
+            TputManager.summaryInfoList.append(newDataFrame)
+        return TputManager.summaryInfoList
 
     def make_sumary_info(self, summaryInfoList):
 
@@ -59,10 +59,10 @@ class TputCalculator :
             averageTput = receivedBytes / elapsedTime * 8 * 1024 / 1000 / 1000
             print("Average T-put : ", averageTput)
 
-            TputCalculator.summaryInfoFrame.loc[k] = [k + 1, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(
+            TputManager.summaryInfoFrame.loc[k] = [k + 1, time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(
                 summaryInfoList[k].head(1)['Time'].values / 1000)), time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(
                 summaryInfoList[k].tail(1)['Time'].values / 1000)),
                                        averageTput, summaryInfoList[k].mean()['Temperature'],
                                        summaryInfoList[k].mean()['Temperature'],
                                        summaryInfoList[k].mean()['Temperature']]
-        return TputCalculator.summaryInfoFrame
+        return TputManager.summaryInfoFrame

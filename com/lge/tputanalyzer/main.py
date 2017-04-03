@@ -1,19 +1,19 @@
 import file_parser
-import graph
-import tput_calculator
+import graph_manager
+import tput_manager
 
 fp = file_parser.FileParser()
-graph = graph.Graph()
-tputCalulator = tput_calculator.TputCalculator()
+graphManager = graph_manager.GraphManager()
+tputManager = tput_manager.TputManager()
 
-tputCalulator.create_summary_info_frame()
+tputManager.create_summary_info_frame()
 rawDataFrame = fp.get_dataframe_from_file('C:/1490929091716_70_47.csv')
-tputDataFrame = tputCalulator.add_tput_column(rawDataFrame)
+tputDataFrame = tputManager.add_tput_column(rawDataFrame)
 
-summaryInfoList = tputCalulator.make_summary_info_list(tputDataFrame)
-summaryInfoDataFrame = tputCalulator.make_sumary_info(summaryInfoList)
+summaryInfoList = tputManager.make_summary_info_list(tputDataFrame)
+summaryInfoDataFrame = tputManager.make_sumary_info(summaryInfoList)
 
 print(summaryInfoDataFrame)
 
-graph.create_bar_graph(summaryInfoDataFrame.Throughput, summaryInfoDataFrame.CallCount)
-graph.create_line_graph(tputDataFrame, tputDataFrame.Time, tputDataFrame.Throughput, tputDataFrame.Time, tputDataFrame.Temperature)
+graphManager.create_bar_graph(summaryInfoDataFrame.Throughput, summaryInfoDataFrame.CallCount)
+graphManager.create_line_graph(tputDataFrame, tputDataFrame.Time, tputDataFrame.Throughput, tputDataFrame.Time, tputDataFrame.Temperature)
