@@ -21,6 +21,6 @@ class GraphManager :
         plt.xticks(positions, labels)
         plt.xlabel('Call Count', size=15)
         plt.ylabel('Throughput (Mbps)', size=15)
-        plt.title('Throughput Summary', size=15)
+        plt.title('Throughput Result', size=15)
         plt.grid()
         plt.show()

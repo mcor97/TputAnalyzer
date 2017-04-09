@@ -2,18 +2,20 @@ import file_parser
 import graph_manager
 import tput_manager
 
-fp = file_parser.FileParser()
-graphManager = graph_manager.GraphManager()
-tputManager = tput_manager.TputManager()
+mFileParser = file_parser.FileParser()
+mGraphManager = graph_manager.GraphManager()
+mThroughputManager = tput_manager.TputManager()
 
-tputManager.create_summary_info_frame()
-rawDataFrame = fp.get_dataframe_from_file('C:/1490929091716_70_47.csv')
-tputDataFrame = tputManager.add_tput_column(rawDataFrame)
+mRawData = mFileParser.getDataFrameFromFile('C:/1490929091716_70_47.csv')
+mMeasurementData = mThroughputManager.addThroughputColumn(mRawData)
+mMeasurementData = mThroughputManager.addAvgCpuClockColumn(mMeasurementData)
+mMeasurementData = mThroughputManager.addRealTimeColumn(mMeasurementData)
 
-summaryInfoList = tputManager.make_summary_info_list(tputDataFrame)
-summaryInfoDataFrame = tputManager.make_sumary_info(summaryInfoList)
+mGroupedDataList = mThroughputManager.groupMeasurementData(mMeasurementData)
+mThroughputResult = mThroughputManager.makeThroughputResult(mGroupedDataList)
 
-print(summaryInfoDataFrame)
+##print(mMeasurementData)
+print(mThroughputResult)
 
-graphManager.create_bar_graph(summaryInfoDataFrame.Throughput, summaryInfoDataFrame.CallCount)
-graphManager.create_line_graph(tputDataFrame, tputDataFrame.Time, tputDataFrame.Throughput, tputDataFrame.Time, tputDataFrame.Temperature)
+mGraphManager.create_bar_graph(mThroughputResult.Throughput, mThroughputResult.CallCount)
+mGraphManager.create_line_graph(mMeasurementData, mMeasurementData.Time, mMeasurementData.Throughput, mMeasurementData.Time, mMeasurementData.Temperature)
