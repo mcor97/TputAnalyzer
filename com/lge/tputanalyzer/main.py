@@ -7,8 +7,6 @@ mGraphManager = graph_manager.GraphManager()
 mThroughputManager = tput_manager.TputManager()
 
 mRawData = mFileParser.getDataFrameFromFile('D:/Utils_for_adb/LG-F600L_V29d_20170424_032245_Asia_Seoul.csv')
-print(mRawData.info())
-print(mRawData)
 mRawData.plot()
 mMeasurementData = mThroughputManager.addThroughputColumn(mRawData)
 mMeasurementData = mThroughputManager.addAvgCpuClockColumn(mMeasurementData)
@@ -17,7 +15,7 @@ mMeasurementData = mThroughputManager.addRealTimeColumn(mMeasurementData)
 mGroupedDataList = mThroughputManager.groupMeasurementData(mMeasurementData)
 mThroughputResult = mThroughputManager.makeThroughputResult(mGroupedDataList)
 
-##print(mMeasurementData)
+# print(mMeasurementData)
 print(mThroughputResult)
 
 mGraphManager.create_bar_graph(mThroughputResult.Throughput, mThroughputResult.CallCount)
