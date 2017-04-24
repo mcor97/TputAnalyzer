@@ -34,11 +34,12 @@ class TputManager :
     def groupMeasurementData(self, dataFrame):
         groupedDataList = []
 
-        callCount = dataFrame.max()['CallCount']
+        callCount = dataFrame.max()['CallCnt']
         print("call count max : ", callCount)
 
         for j in range(0, callCount):
-            groupedData = dataFrame[dataFrame.CallCount == (j + 1)]
+            # groupedData = dataFrame[dataFrame.CallCount == (j + 1)]
+            groupedData = dataFrame[dataFrame.CallCnt == (j + 1)]
 
             length = len(groupedData.Throughput)
             for m in numpy.arange(0, length - 2):
@@ -84,9 +85,9 @@ class TputManager :
             avgCpuClock = groupedList[k].mean()['AvgCpuClock']
 
             ## CPU Occupancy
-            minCpuOccupancy = groupedList[k].min()['CPU_Occupacy(%)']
-            maxCpuOccupancy = groupedList[k].max()['CPU_Occupacy(%)']
-            avgCpuOccupancy = groupedList[k].mean()['CPU_Occupacy(%)']
+            minCpuOccupancy = groupedList[k].min()['CPU_Usage(%)']
+            maxCpuOccupancy = groupedList[k].max()['CPU_Usage(%)']
+            avgCpuOccupancy = groupedList[k].mean()['CPU_Usage(%)']
 
             throughputResult.loc[k] = [k + 1, startTime, endTime, througthput, minTemperature, avgTemperature, maxTemperature,
                                        minCpuClock, avgCpuClock ,maxCpuClock, minCpuOccupancy, avgCpuOccupancy, maxCpuOccupancy]

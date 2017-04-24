@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 
 class GraphManager :
-
     def create_line_graph(self, data, label1, label2, label3, label4):
         plt.figure(figsize=(15, 8))
         plt.plot(label1, label2, label3, label4, 'c')
