@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 
 class GraphManager :
-    def create_line_graph(self, data, label1, label2, label3, label4):
+    def create_line_graph(self, data, time1, throughput, time2, temperature):
         plt.figure(figsize=(15, 8))
-        plt.plot(label1, label2, label3, label4, 'c')
+        plt.plot(time1, throughput, time2, temperature, 'c')
         plt.xlabel('time (ms)', size=15)
         plt.ylabel('Throuthput (Mbps)', size=15)
         plt.title('Detailed Throughput Graph', size=15)
