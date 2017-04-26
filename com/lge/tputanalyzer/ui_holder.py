@@ -10,10 +10,13 @@ class UiHolder(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
         self.myApp = mQApplication
-        self.selectFileButton.clicked.connect(self.selectedBtn_clicked)
+        self.selectFileButton.clicked.connect(self.__selectedBtn_clicked__)
 
-    def selectedBtn_clicked(self):
+    def __selectedBtn_clicked__(self):
         self.selectedFileName = QFileDialog.getOpenFileName(self)
+        self.__close_myApp__()
+
+    def __close_myApp__(self):
         self.myApp.quit()
         self.close()
 
