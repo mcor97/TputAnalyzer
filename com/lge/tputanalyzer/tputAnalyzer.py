@@ -25,7 +25,7 @@ if __name__ == "__main__":
     print(mFileName)
 
     mRawData = mTputAnalyzer.mFileParser.getDataFrameFromFile(mFileName)
-    mRawData.plot()
+    # mRawData.plot()
     mMeasurementData = mTputAnalyzer.mThroughputManager.addThroughputColumn(mRawData)
     mMeasurementData = mTputAnalyzer.mThroughputManager.addAvgCpuClockColumn(mMeasurementData)
     mMeasurementData = mTputAnalyzer.mThroughputManager.addRealTimeColumn(mMeasurementData)
