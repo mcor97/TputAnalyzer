@@ -4,15 +4,17 @@ import time
 
 class TputManager :
 
-    def addThroughputColumn(self, dataFrame):
+    def addThroughputColumn(self, dataFrame, direction):
         throughput = numpy.zeros(len(dataFrame.Time))
 
         for i in numpy.arange(1, len(dataFrame.Time)):
-            throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i - 1])) * 8 * 1024 / 1000 / 1000
+            if direction == 'DL':
+                throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i - 1])) * 8 * 1024 / 1000 / 1000
+            elif direction == 'UL':
+                throughput[i] = ((dataFrame.SentBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i - 1])) * 8 * 1024 / 1000 / 1000
 
         dataFrame['Throughput'] = throughput
         return dataFrame
-
 
     def addRealTimeColumn(self, dataFrame):
         data = [time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(dataFrame.Time[i] / 1000)) for i in range(len(dataFrame.Time))]
@@ -25,7 +27,8 @@ class TputManager :
         avgCpuClock = numpy.zeros(len(dataFrame.Time))
 
         for i in numpy.arange(1, len(dataFrame.Time)):
-            avgCpuClock[i] = (dataFrame.CPU0_Freq0[i] + dataFrame.CPU0_Freq1[i] + dataFrame.CPU0_Freq2[i] + dataFrame.CPU0_Freq3[i]) / 4
+            avgCpuClock[i] = (dataFrame.CPU0_Freq0[i] + dataFrame.CPU0_Freq1[i] + dataFrame.CPU0_Freq2[i] + dataFrame.CPU0_Freq3[i] + dataFrame.CPU0_Freq4[i] + dataFrame.CPU0_Freq5[i]
+                              + dataFrame.CPU0_Freq6[i] + dataFrame.CPU0_Freq7[i]) / 8
 
         dataFrame['AvgCpuClock'] = avgCpuClock
         return dataFrame
@@ -54,7 +57,7 @@ class TputManager :
         return groupedDataList
 
 
-    def makeThroughputResult(self, groupedList):
+    def makeThroughputResult(self, groupedList, direction):
 
         throughputResult = pd.DataFrame(columns=(
             'CallCount', 'StartTime', 'EndTime', 'Throughput', 'MinTemperature', 'AvgTemperature', 'MaxTemperature',
@@ -64,15 +67,18 @@ class TputManager :
             print("--------------------------------")
 
             ## Time conversion
-            startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(
-                groupedList[k].head(1)['Time'].values / 1000))
-            endTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(
-                groupedList[k].tail(1)['Time'].values / 1000))
+            startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(groupedList[k].head(1)['Time'].values / 1000))
+            endTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(groupedList[k].tail(1)['Time'].values / 1000))
 
             ## Throughput
             elapsedTime = groupedList[k].tail(1)['Time'].values - groupedList[k].head(1)['Time'].values
-            receivedBytes = groupedList[k].sum()['ReceivedBytes']
-            througthput = receivedBytes / elapsedTime * 8 * 1024 / 1000 / 1000
+
+            if direction == 'DL':
+                receivedBytes = groupedList[k].sum()['ReceivedBytes']
+                througthput = receivedBytes / elapsedTime * 8 * 1024 / 1000 / 1000
+            elif direction == 'UL':
+                sentytes = groupedList[k].sum()['SentBytes']
+                througthput = sentytes / elapsedTime * 8 * 1024 / 1000 / 1000
 
             ## Temperature
             minTemperature = groupedList[k].min()['Temperature']
