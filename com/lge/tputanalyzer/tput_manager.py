@@ -9,9 +9,15 @@ class TputManager :
 
         for i in numpy.arange(1, len(dataFrame.Time)):
             if direction == 'DL':
-                throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000
+                if (dataFrame.ReceivedBytes[i] != 0):
+                    throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000
+                else:
+                    throughput[i] = 0
             elif direction == 'UL':
-                throughput[i] = ((dataFrame.SentBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000
+                if(dataFrame.SentBytes[i] != 0):
+                    throughput[i] = ((dataFrame.SentBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i - 1])) * 8 * 1024 / 1000 / 1000
+                else:
+                    throughput[i] = 0
 
         dataFrame['Throughput'] = throughput
         return dataFrame
