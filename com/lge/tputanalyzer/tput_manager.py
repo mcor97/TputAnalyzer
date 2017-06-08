@@ -40,14 +40,19 @@ class TputManager :
 
             length = len(groupedData.Throughput)
             for m in numpy.arange(0, length - 2):
-                if groupedData.iloc[0]['Throughput'] < 1 and groupedData.iloc[1]['Throughput'] < 1:
+                if (groupedData.iloc[0]['Throughput'] < 1 and groupedData.iloc[1]['Throughput'] < 1 ):
                     groupedData = groupedData.drop(groupedData.index[0])
+                else:
+                    break
 
             for m in numpy.arange(0, length - 2):
-                if groupedData.iloc[-1]['Throughput'] < 1 and groupedData.iloc[-2]['Throughput'] < 1:
+                if (groupedData.iloc[-1]['Throughput'] < 1):
                     groupedData = groupedData.drop(groupedData.index[-1])
+                else:
+                    break
 
             groupedDataList.append(groupedData)
+
         return groupedDataList
 
 
@@ -58,8 +63,6 @@ class TputManager :
             "MinCpuOccupancy", "AvgCpuOccupancy", "MaxCpuOccupancy"))
 
         for k in range(0, len(groupedList)):
-            print("--------------------------------")
-
             ## Time conversion
             startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(groupedList[k].head(1)['Time'].values / 1000))
             endTime = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(groupedList[k].tail(1)['Time'].values / 1000))
