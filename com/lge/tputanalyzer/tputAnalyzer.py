@@ -25,9 +25,11 @@ if __name__ == "__main__":
 
     # mFileName = mTputAnalyzer.mUiHolder.getSeldectedFileName()
     # print(mFileName)
-    # mFileName = 'D:/Utils_for_adb/LG-F600L_V29d_20170426_033825_Asia_Seoul.csv'
-    # mFileName = 'D:/Utils_for_adb/LG-F600L_V29d_20170424_032245_Asia_Seoul.csv'
-    mFileName = 'D:/Utils_for_adb/LGM-V300L_V07t_20170428_045919_Asia_Seoul_GSO_ON_C10.csv'
+    #mFileName = 'C:/Company/0605/LGM-G600K_V10t_20170607_094951_Asia_Seoul.csv'
+    #mFileName = 'C:/Company/0605/LGM-G600K_V10t_20170607_112448_Asia_Seoul.csv'
+    mFileName = 'C:/Company/0605/LGM-G600K_V10t_20170607_094951_Asia_Seoul.csv'
+    #mFileName = 'C:\LGM-G600L_V10m_20170425_095246_Asia_Seoul.csv'
+    #mFileName = 'C:\LGM-G600L_V10m_20170425_095246_Asia_Seoul_cpu8.csv'
     mRawData = mTputAnalyzer.mFileParser.getDataFrameFromFile(mFileName)
     # print(mRawData)
 
@@ -35,22 +37,22 @@ if __name__ == "__main__":
     # print(mRawData.shape), shape[0] means the count of row and shape[1] measn the count of column.
     # mRawData = mRawData.drop(['Unnamed: '.__str__() + (mRawData.shape[1]-1).__str__()], axis=1)
 
-    # mMeasurementData = mTputAnalyzer.mThroughputManager.addDlTputColumn(mRawData)
-    mMeasurementData = mTputAnalyzer.mThroughputManager.addThroughputColumn(mRawData, 'UL')
-    mMeasurementData = mTputAnalyzer.mThroughputManager.addAvgCpuClockColumn(mMeasurementData)
+    mMeasurementData = mTputAnalyzer.mThroughputManager.addThroughputColumn(mRawData, mRawData.Direction[0])
     mMeasurementData = mTputAnalyzer.mThroughputManager.addRealTimeColumn(mMeasurementData)
     # print(mMeasurementData)
 
     mGroupedDataList = mTputAnalyzer.mThroughputManager.groupMeasurementData(mMeasurementData)
-    # print('--------------------')
+    print('--------------------')
     # print(mGroupedDataList[0])
     # print(mGroupedDataList[1])
-    mThroughputResult = mTputAnalyzer.mThroughputManager.makeThroughputResult(mGroupedDataList, 'UL')
-    # print(mThroughputResult)
+    mThroughputResult = mTputAnalyzer.mThroughputManager.makeThroughputResult(mGroupedDataList, mRawData.Direction[0])
+    print(mThroughputResult)
 
-    mTputAnalyzer.mGraphManager.create_bar_graph(mThroughputResult.Throughput, mThroughputResult.CallCount)
-    # mTputAnalyzer.mGraphManager.create_line_graph(mMeasurementData, mMeasurementData.Time, mMeasurementData.Throughput, mMeasurementData.Time, mMeasurementData.Temperature)
-    mTputAnalyzer.mGraphManager.create_line_graph(mMeasurementData, mMeasurementData.Time, mMeasurementData.Throughput, mMeasurementData.Time, mMeasurementData['CPU_Usage(%)'])
+    mTputAnalyzer.mGraphManager.create_summary_graph(mThroughputResult, mMeasurementData)
+    mTputAnalyzer.mGraphManager.create_temperature_cpuusage_graph(mThroughputResult, mMeasurementData)
+    mTputAnalyzer.mGraphManager.create_cpuclock_graph(mThroughputResult, mMeasurementData)
+    mTputAnalyzer.mGraphManager.create_cpuclock_temperature_graph(mThroughputResult, mMeasurementData)
+
 
     # sTemperature = numpy.zeros(len(mMeasurementData.ix[:, 8]))
     # sCpuUsage = numpy.zeros(len(mMeasurementData.ix[:, 9]))

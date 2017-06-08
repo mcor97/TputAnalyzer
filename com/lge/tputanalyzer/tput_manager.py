@@ -9,9 +9,9 @@ class TputManager :
 
         for i in numpy.arange(1, len(dataFrame.Time)):
             if direction == 'DL':
-                throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i - 1])) * 8 * 1024 / 1000 / 1000
+                throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000
             elif direction == 'UL':
-                throughput[i] = ((dataFrame.SentBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i - 1])) * 8 * 1024 / 1000 / 1000
+                throughput[i] = ((dataFrame.SentBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000
 
         dataFrame['Throughput'] = throughput
         return dataFrame
@@ -21,18 +21,6 @@ class TputManager :
         realTime = pd.Series(data, name='RealTime')
         dataFrame = dataFrame.join(realTime)
         return dataFrame
-
-
-    def addAvgCpuClockColumn(self, dataFrame):
-        avgCpuClock = numpy.zeros(len(dataFrame.Time))
-
-        for i in numpy.arange(1, len(dataFrame.Time)):
-            avgCpuClock[i] = (dataFrame.CPU0_Freq0[i] + dataFrame.CPU0_Freq1[i] + dataFrame.CPU0_Freq2[i] + dataFrame.CPU0_Freq3[i] + dataFrame.CPU0_Freq4[i] + dataFrame.CPU0_Freq5[i]
-                              + dataFrame.CPU0_Freq6[i] + dataFrame.CPU0_Freq7[i]) / 8
-
-        dataFrame['AvgCpuClock'] = avgCpuClock
-        return dataFrame
-
 
     def groupMeasurementData(self, dataFrame):
         groupedDataList = []
@@ -61,7 +49,7 @@ class TputManager :
 
         throughputResult = pd.DataFrame(columns=(
             'CallCount', 'StartTime', 'EndTime', 'Throughput', 'MinTemperature', 'AvgTemperature', 'MaxTemperature',
-            'MinCpuClock', 'AvgCpuClock', 'MaxCpuClock', "MinCpuOccupancy", "AvgCpuOccupancy", "MaxCpuOccupancy"))
+            "MinCpuOccupancy", "AvgCpuOccupancy", "MaxCpuOccupancy"))
 
         for k in range(0, len(groupedList)):
             print("--------------------------------")
@@ -75,20 +63,15 @@ class TputManager :
 
             if direction == 'DL':
                 receivedBytes = groupedList[k].sum()['ReceivedBytes']
-                througthput = receivedBytes / elapsedTime * 8 * 1024 / 1000 / 1000
+                througthput = numpy.round(receivedBytes / elapsedTime * 8 * 1024 / 1000 / 1000, 1)
             elif direction == 'UL':
                 sentytes = groupedList[k].sum()['SentBytes']
-                througthput = sentytes / elapsedTime * 8 * 1024 / 1000 / 1000
+                througthput = numpy.round(sentytes / elapsedTime * 8 * 1024 / 1000 / 1000, 1)
 
             ## Temperature
             minTemperature = groupedList[k].min()['Temperature']
             maxTemperature = groupedList[k].max()['Temperature']
             avgTemperature = groupedList[k].mean()['Temperature']
-
-            ## CPU Clock
-            minCpuClock = groupedList[k].min()['AvgCpuClock']
-            maxCpuClock = groupedList[k].max()['AvgCpuClock']
-            avgCpuClock = groupedList[k].mean()['AvgCpuClock']
 
             ## CPU Occupancy
             minCpuOccupancy = groupedList[k].min()['CPU_Usage(%)']
@@ -96,5 +79,5 @@ class TputManager :
             avgCpuOccupancy = groupedList[k].mean()['CPU_Usage(%)']
 
             throughputResult.loc[k] = [k + 1, startTime, endTime, througthput, minTemperature, avgTemperature, maxTemperature,
-                                       minCpuClock, avgCpuClock ,maxCpuClock, minCpuOccupancy, avgCpuOccupancy, maxCpuOccupancy]
+                                       minCpuOccupancy, avgCpuOccupancy, maxCpuOccupancy]
         return throughputResult
