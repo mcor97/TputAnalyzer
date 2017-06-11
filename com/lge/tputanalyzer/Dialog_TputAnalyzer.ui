@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>200</height>
+    <width>890</width>
+    <height>868</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -16,45 +16,33 @@
   <property name="windowTitle">
    <string>TputAnalyzer</string>
   </property>
-  <widget class="QPushButton" name="selectFileButton">
+  <widget class="QPushButton" name="fileOpenBtn">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>160</y>
-     <width>75</width>
-     <height>23</height>
+     <x>730</x>
+     <y>20</y>
+     <width>111</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>HY신명조</family>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
     </font>
    </property>
    <property name="text">
-    <string>File Open</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="DescriptionLabel">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>381</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>TputTracingApp이 생성한 CSV 파일만 지원합니다.</string>
+    <string>Open CSV File</string>
    </property>
   </widget>
   <widget class="QLabel" name="OrganizationLabel">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>170</y>
-     <width>181</width>
+     <x>670</x>
+     <y>820</y>
+     <width>201</width>
      <height>16</height>
     </rect>
    </property>
@@ -66,6 +54,138 @@
    </property>
    <property name="text">
     <string>Copyright®, dom-data@lge.com</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="summaryGraphBtn">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>300</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>T-put Summary Graph</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cpuTempUsageGraphBtn">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>350</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>CPU 온도, CPU 사용량 Graph</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cpuClockGraphBtn">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>400</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>CPU Clock Graph</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cpuClockTempGraphBtn">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>450</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>CPU Clock - CPU 온도 Graph</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_2">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>true</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>Overall Test Result</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_3">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>270</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>true</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>Detailed Test Result</string>
    </property>
   </widget>
  </widget>

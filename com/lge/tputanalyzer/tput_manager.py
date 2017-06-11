@@ -1,6 +1,7 @@
 import numpy
 import pandas as pd
 import time
+import datetime
 
 class TputManager :
 
@@ -10,7 +11,7 @@ class TputManager :
         for i in numpy.arange(1, len(dataFrame.Time)):
             if direction == 'DL':
                 if (dataFrame.ReceivedBytes[i] != 0):
-                    throughput[i] = ((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000
+                    throughput[i] = numpy.round(((dataFrame.ReceivedBytes[i]) / (dataFrame.Time[i] - dataFrame.Time[i-1])) * 8 * 1024 / 1000 / 1000 ,1)
                 else:
                     throughput[i] = 0
             elif direction == 'UL':
@@ -22,9 +23,21 @@ class TputManager :
         dataFrame['Throughput'] = throughput
         return dataFrame
 
+    def convertToKorTime(self, dataFrame):
+        time_gap = datetime.timedelta(hours=9)
+        print(time_gap)
+        for i in numpy.arange(1, len(dataFrame.Time)):
+            #print(dataFrame.Time[i-1])
+            #print(time.gmtime(dataFrame.Time[i] / 1000))
+            #dataFrame.Time[i-1] = ((dataFrame.Time[i] / 1000) + time_gap ) * 1000
+            dataFrame.Time[i - 1] += 90018356
+            #print(dataFrame.Time[i - 1])
+
     def addRealTimeColumn(self, dataFrame):
         data = [time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(dataFrame.Time[i] / 1000)) for i in range(len(dataFrame.Time))]
+
         realTime = pd.Series(data, name='RealTime')
+
         dataFrame = dataFrame.join(realTime)
         return dataFrame
 
@@ -35,7 +48,6 @@ class TputManager :
         print("call count max : ", callCount)
 
         for j in range(0, callCount):
-            # groupedData = dataFrame[dataFrame.CallCount == (j + 1)]
             groupedData = dataFrame[dataFrame.CallCnt == (j + 1)]
 
             length = len(groupedData.Throughput)

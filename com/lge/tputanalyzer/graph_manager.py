@@ -3,6 +3,82 @@ import seaborn as sns
 
 class GraphManager :
 
+    def create_grouped_graph(self, groupData):
+        num_bars = len(groupData.Time)
+        print(num_bars)
+        plt.figure(figsize=(19, 9))
+        plt.subplot(211)
+        plt.plot(groupData.Time, groupData.Throughput)
+        plt.plot(groupData.Time, groupData.Temperature)
+
+        for k in range(1, num_bars+1):
+            plt.text(groupData.iloc[k-1]['Time'], groupData.iloc[k-1]['Throughput'], groupData.iloc[k-1]['Throughput'], ha='center', va='bottom', color='r')
+            plt.text(groupData.iloc[k-1]['Time'], groupData.iloc[k-1]['Temperature'], groupData.iloc[k-1]['Temperature'], ha='center', va='bottom', color='r')
+
+        plt.title('Throughput - Temperature Graph', size=10)
+        plt.ylabel('Throughput (Mbps) / Temperature (.C)', size=20)
+        plt.legend(['Throughput', 'Temperature'])
+        plt.grid()
+
+        plt.subplot(212)
+        plt.plot(groupData.Time, groupData.Throughput)
+        plt.plot(groupData.Time, groupData['CPU_Usage(%)'])
+        #plt.xlabel('time (ms)', size=10)
+        plt.ylabel('Throughput (Mbps) / CPU Usage (%)', size=10)
+        plt.title('Throughput - CPU Usage (Detailed Graph)', size=20)
+        plt.legend(['Throughput', 'CPU Usage(%)'])
+        plt.grid()
+        plt.show()
+
+        cpuCount = 0
+        for s in list(groupData):
+            if "Freq" in s:
+                cpuCount+= 1
+
+        num_bars = len(groupData.CPU0_Freq0)
+
+        cpuYlimMax = 0
+        for i in range (1, cpuCount+1):
+            if (cpuYlimMax < groupData.iloc[i-1]['CPU0_Freq' + str(i-1)].max()):
+                cpuYlimMax = groupData.iloc[i-1]['CPU0_Freq' + str(i-1)].max()
+
+        for j in range (1, cpuCount+1):
+            cpu = 'CPU0_Freq' + str(j-1)
+            subplotTotalCount = cpuCount
+            subplotRowCount = j
+
+            if (subplotTotalCount > 4):
+                subplotTotalCount = subplotTotalCount - 4
+
+            if (j > 4):
+                subplotRowCount = subplotRowCount - 4
+
+            if (subplotRowCount == 1):
+                plt.figure(figsize=(19, 9))
+
+            subplotNum = 100 * subplotTotalCount + 10 + subplotRowCount
+            plt.subplot(subplotNum)
+
+            maxHit = False
+            minHit = False
+            plt.plot(groupData.Time, groupData.Throughput*10000)
+            plt.plot(groupData.Time, groupData[cpu])
+            plt.plot(groupData.Time, groupData.Temperature*10000)
+            for k in range(1, num_bars + 1):
+                #plt.text(groupData.iloc[k - 1]['Time'], groupData.iloc[k - 1]['Throughput'], groupData.iloc[k - 1]['Throughput'], ha='center', va='bottom', color='r')
+                plt.text(groupData.iloc[k - 1]['Time'], groupData.iloc[k - 1][cpu], groupData.iloc[k - 1][cpu], ha='center', va='bottom', color='r')
+                plt.text(groupData.iloc[k - 1]['Time'], groupData.iloc[k - 1]['Temperature'], groupData.iloc[k - 1]['Temperature'], ha='center', va='bottom', color='r')
+
+            if (subplotNum == 100 * subplotTotalCount + 11):
+                plt.title('Throughput - CPU Clock - Temperature Graph', size=20)
+            plt.ylabel('CPU' + str(j-1) + ' Clock (KHz)', size=10)
+            plt.legend(['Throughput', 'CPU Clock(KHz)', 'Temperature'])
+            plt.ylim(0, cpuYlimMax + 100000)
+            plt.grid()
+            if (subplotNum == 100 * subplotTotalCount + 10 + subplotTotalCount):
+                plt.show()
+
+
     def create_temperature_cpuusage_graph(self, throughputResult, measurementData):
 
         num_bars = len(measurementData.Time)
@@ -175,7 +251,7 @@ class GraphManager :
                 plt.text(k+0.4, round(throughputResult.AvgTemperature[k - 1],0), round(throughputResult.AvgTemperature[k - 1],0), ha='center', va='bottom', color='r')
 
             #if (num_bars <= 30):
-            if (k == (round(num_bars / 20) * i + 1)):
+            if (k == (round(num_bars / 30) * i + 1)):
                 plt.text(k, throughputResult.Throughput[k - 1], throughputResult.Throughput[k - 1], ha='center', va='bottom')
                 plt.text(k + 0.4, round(throughputResult.AvgTemperature[k - 1], 0), round(throughputResult.AvgTemperature[k - 1], 0), ha='center', va='bottom')
                 i += 1
