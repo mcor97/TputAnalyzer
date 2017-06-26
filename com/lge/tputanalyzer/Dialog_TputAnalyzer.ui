@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>890</width>
-    <height>868</height>
+    <width>1031</width>
+    <height>908</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -19,7 +19,7 @@
   <widget class="QPushButton" name="fileOpenBtn">
    <property name="geometry">
     <rect>
-     <x>730</x>
+     <x>880</x>
      <y>20</y>
      <width>111</width>
      <height>31</height>
@@ -40,8 +40,8 @@
   <widget class="QLabel" name="OrganizationLabel">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>820</y>
+     <x>820</x>
+     <y>880</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -59,8 +59,8 @@
   <widget class="QPushButton" name="summaryGraphBtn">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>300</y>
+     <x>800</x>
+     <y>290</y>
      <width>201</width>
      <height>31</height>
     </rect>
@@ -78,8 +78,8 @@
   <widget class="QPushButton" name="cpuTempUsageGraphBtn">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>350</y>
+     <x>800</x>
+     <y>340</y>
      <width>201</width>
      <height>31</height>
     </rect>
@@ -97,8 +97,8 @@
   <widget class="QPushButton" name="cpuClockGraphBtn">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>400</y>
+     <x>800</x>
+     <y>390</y>
      <width>201</width>
      <height>31</height>
     </rect>
@@ -116,8 +116,8 @@
   <widget class="QPushButton" name="cpuClockTempGraphBtn">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>450</y>
+     <x>800</x>
+     <y>440</y>
      <width>201</width>
      <height>31</height>
     </rect>
@@ -144,10 +144,10 @@
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
+     <pointsize>11</pointsize>
+     <weight>75</weight>
      <italic>true</italic>
-     <bold>false</bold>
+     <bold>true</bold>
     </font>
    </property>
    <property name="mouseTracking">
@@ -157,7 +157,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="text">
-    <string>Overall Test Result</string>
+    <string>Test Result Summary</string>
    </property>
   </widget>
   <widget class="QLabel" name="OrganizationLabel_3">
@@ -172,10 +172,10 @@
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
+     <pointsize>11</pointsize>
+     <weight>75</weight>
      <italic>true</italic>
-     <bold>false</bold>
+     <bold>true</bold>
     </font>
    </property>
    <property name="mouseTracking">

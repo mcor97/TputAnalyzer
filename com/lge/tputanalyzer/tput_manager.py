@@ -5,6 +5,20 @@ import datetime
 
 class TputManager :
 
+    def convertFrequencyColumn(self, dataFrame):
+        cpuCount = 0
+        for s in list(dataFrame):
+            if "CPU_CUR_Freq" in s:
+                cpuCount += 1
+
+        for i in numpy.arange(0, len(dataFrame.Time)):
+            for k in range(0, cpuCount) :
+                currentCpu = "CPU_CUR_Freq" + str(k)
+                maxCpu = "CPU_MAX_Freq" + str(k)
+                dataFrame.loc[i, currentCpu]  = dataFrame[currentCpu][i] / 1000;
+                dataFrame.loc[i, maxCpu] = dataFrame[maxCpu][i] / 1000;
+        return dataFrame
+
     def addThroughputColumn(self, dataFrame, direction):
         throughput = numpy.zeros(len(dataFrame.Time))
 
@@ -69,10 +83,12 @@ class TputManager :
 
 
     def makeThroughputResult(self, groupedList, direction):
-
+        print("makeThroughputResult")
         throughputResult = pd.DataFrame(columns=(
             'CallCount', 'StartTime', 'EndTime', 'Throughput', 'MinTemperature', 'AvgTemperature', 'MaxTemperature',
-            "MinCpuOccupancy", "AvgCpuOccupancy", "MaxCpuOccupancy"))
+            "MinCpuOccupancy", "AvgCpuOccupancy", "MaxCpuOccupancy",
+            "AvgCurrentCpuFreq0", "AvgCurrentCpuFreq1", "AvgCurrentCpuFreq2", "AvgCurrentCpuFreq3", "AvgCurrentCpuFreq4", "AvgCurrentCpuFreq5", "AvgCurrentCpuFreq6","AvgCurrentCpuFreq7",
+            "AvgMaxCpuFreq0", "AvgMaxCpuFreq1", "AvgMaxCpuFreq2", "AvgMaxCpuFreq3", "AvgMaxCpuFreq4", "AvgMaxCpuFreq5", "AvgMaxCpuFreq6","AvgMaxCpuFreq7"))
 
         for k in range(0, len(groupedList)):
             ## Time conversion
@@ -99,6 +115,24 @@ class TputManager :
             maxCpuOccupancy = groupedList[k].max()['CPU_Usage(%)']
             avgCpuOccupancy = groupedList[k].mean()['CPU_Usage(%)']
 
+            ## CPU Frequency
+            cpuCount = 0
+            for s in list(groupedList[0]):
+                if "CPU_CUR_Freq" in s:
+                    cpuCount+= 1
+            print(cpuCount)
             throughputResult.loc[k] = [k + 1, startTime, endTime, througthput, minTemperature, avgTemperature, maxTemperature,
-                                       minCpuOccupancy, avgCpuOccupancy, maxCpuOccupancy]
+                                       minCpuOccupancy, avgCpuOccupancy, maxCpuOccupancy, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            for i in range (1, cpuCount+1):
+                cpu = 'CPU_CUR_Freq' + str(i-1)
+                addToColumn = 'AvgCurrentCpuFreq' + str(i-1)
+                throughputResult.loc[k, addToColumn] = round(groupedList[k][cpu].mean(), 0)
+                print( round(groupedList[k][cpu].mean(), 0))
+
+            for i in range (1, cpuCount+1):
+                cpu = 'CPU_MAX_Freq' + str(i-1)
+                addToColumn = 'AvgMaxCpuFreq' + str(i-1)
+                throughputResult.loc[k, addToColumn] = round(groupedList[k].mean()[cpu],0)
+                print(round(groupedList[k][cpu].mean(), 0))
+
         return throughputResult

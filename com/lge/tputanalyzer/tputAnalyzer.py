@@ -26,12 +26,15 @@ class TputAnalyzer(QMainWindow, form_class):
         self.cpuClockGraphBtn.clicked.connect(self.__cpuClockGraphBtn_clicked__)
         self.cpuClockTempGraphBtn.clicked.connect(self.__cpuClockTempGraphBtn_clicked__)
         self.resultListView = QListWidget(self)
-        self.resultListView.setGeometry(30, 60, 830, 190)
+        self.resultListView.setGeometry(30, 60, 980, 190)
+        self.resultListView.itemActivated.connect(self.resultListDoubleClickedItem)
+        self.resultListView.itemClicked.connect(self.resultListOneClickedItem)
         self.detailedListView = QListWidget(self)
-        self.detailedListView.setGeometry(30, 290, 600, 550)
-        #self.detailedListView.doubleClicked.connect(self.doubleClickedItem)
-        self.detailedListView.itemActivated.connect(self.doubleClickedItem)
+        self.detailedListView.setGeometry(30, 290, 750, 600)
+        self.detailedListView.itemClicked.connect(self.detailedListOneClickedItem)
+
         self.fileOpened = False
+        self.viewIndex = -1
 
     def pushButtonClicked(self):
         print(self.lineEdit.text())
@@ -42,6 +45,7 @@ class TputAnalyzer(QMainWindow, form_class):
         return self.data_frame
 
     def makeData(self, rawData):
+        self.mMeasurementData = self.mThroughputManager.convertFrequencyColumn(rawData)
         self.mMeasurementData = self.mThroughputManager.addThroughputColumn(rawData, rawData.Direction[0])
         #self.mMeasurementData = self.mThroughputManager.convertToKorTime(self.mMeasurementData)
         self.mMeasurementData = self.mThroughputManager.addRealTimeColumn(self.mMeasurementData)
@@ -53,13 +57,14 @@ class TputAnalyzer(QMainWindow, form_class):
         print(self.mThroughputResult)
 
     def printResult(self):
-
+        #resultListView.clear()
+        #detailedListView.clear()
         if (self.mMeasurementData.Direction[0] == 'UL'):
             self.resultListView.addItem("< Uplink Throughput Result >")
         else :
             self.resultListView.addItem("< Downlink Throughput Result >")
 
-        testAppName = self.mMeasurementData.PackageName[0]
+            testAppName = self.mMeasurementData.PackageName[0]
         if (testAppName.find("xcal.mobile") != -1):
             testAppName = "SAT (" + self.mMeasurementData.PackageName[0] + ")"
         elif (testAppName.find("benchbee") != -1):
@@ -68,7 +73,6 @@ class TputAnalyzer(QMainWindow, form_class):
             testAppName = "NIA (" + self.mMeasurementData.PackageName[0] + ")"
         elif (testAppName.find("ftpcafe") != -1):
             testAppName = "FTP Cafe (" + self.mMeasurementData.PackageName[0] + ")"
-        print(testAppName)
 
         self.resultListView.addItem("   - 측정 앱 : " + testAppName)
         self.resultListView.addItem("   - 결과 파일 : " + self.selectedFileName[0])
@@ -80,83 +84,111 @@ class TputAnalyzer(QMainWindow, form_class):
         self.resultListView.addItem("< 측정 결과 >")
 
         # 평균
-        meanThroughput = self.mThroughputResult.Throughput.mean()
+        meanThroughput = numpy.round(self.mThroughputResult.Throughput.mean(), 1)
         # 최대
-        maxThroughput = self.mThroughputResult.Throughput.max()
+        maxThroughput = numpy.round(self.mThroughputResult.Throughput.max(), 1)
         # 최소
-        minThroughput = self.mThroughputResult.Throughput.min()
+        minThroughput = numpy.round(self.mThroughputResult.Throughput.min(), 1)
         # 표준편차
-        stdThroughput = self.mThroughputResult.Throughput.std()
+        stdThroughput = numpy.round(self.mThroughputResult.Throughput.std(), 1)
         # 분산
-        varThroughput = self.mThroughputResult.Throughput.var()
+        varThroughput = numpy.round(self.mThroughputResult.Throughput.var(), 1)
 
-        print(varThroughput)
+        meanTemperature = numpy.round(self.mThroughputResult.AvgTemperature.mean(), 1)
+
         self.resultListView.addItem("   - 평균 : " + str(meanThroughput) + " Mbps,   최대 : " + str(maxThroughput) + " Mbps,   최소 : " + str(minThroughput) + " Mbps")
         self.resultListView.addItem("   - 표준편차 : " + str(stdThroughput) + ",   분산 : " + str(varThroughput))
-        print("abc")
 
+        self.detailedListView.addItem("======== 전체 평균 ========")
+        item = QListWidgetItem("  - T-put : " + str(meanThroughput) + " Mbps\tCPU 온도 : " + str(meanTemperature))
+        item.setBackground(QColor('blue'))
+        item.setForeground(QColor('white'))
+        self.detailedListView.addItem(item)
+        self.detailedListView.addItem("")
+        self.detailedListView.addItem("======= 회차별 평균 =======")
         num_bars = len(self.mThroughputResult.Throughput)
+        cpuCount = 0
+        for s in list(self.mMeasurementData):
+            if "CPU_CUR_Freq" in s:
+                cpuCount += 1
+        print("this this: ", cpuCount)
         for i in range(1, num_bars + 1):
             print(self.mThroughputResult.AvgTemperature[i - 1])
-            item = QListWidgetItem(" - " + str(i) + " 회차 T-put : " + str(numpy.round(self.mThroughputResult.Throughput[i-1],1))
-                                   + " Mbps,  CPU 온도 : " + str(numpy.round(self.mThroughputResult.AvgTemperature[i-1],2))
-                                   + " ,  CPU 점유율(%) : " + str(numpy.round(self.mThroughputResult.AvgCpuOccupancy[i - 1], 2)))
+            itemString = "<" + str(i) + " 회차>\n\tT-put : " + str(numpy.round(self.mThroughputResult.Throughput[i - 1], 1)) + " Mbps,\tCPU 온도 : " + str(numpy.round(self.mThroughputResult.AvgTemperature[i - 1], 2)) + "\tCPU 점유율(%) : " + str(numpy.round(self.mThroughputResult.AvgCpuOccupancy[i - 1], 2)) + "\n\t"
+            for j in range(1, cpuCount + 1):
+                maxCpu = 'AvgMaxCpuFreq' + str(j - 1)
+                print(self.mThroughputResult[maxCpu][i - 1])
+                itemString += "CPU" + str(j - 1) + "_Freq : " + str(numpy.round(self.mThroughputResult[maxCpu][i - 1],0)) + "KHz\t"
+            item = QListWidgetItem(itemString)
             if (self.mThroughputResult.Throughput[i - 1] < meanThroughput):
-                item.setBackground(QColor('#fdc086'))
+                item.setBackground(QColor('yellow'))
+            if (self.mThroughputResult.Throughput[i - 1] == minThroughput):
+                item.setBackground(QColor('red'))
             self.detailedListView.addItem(item)
-        print("abc")
 
-    def doubleClickedItem(self, item):
+    def resultListOneClickedItem(self, item):
+        self.viewIndex = -1
+        print("one clicked")
         print(item.text())
-        print(self.detailedListView.currentRow())
-        index = self.detailedListView.currentRow()
+        index = self.resultListView.currentRow()
         print(index)
-        self.mGraphManager.create_grouped_graph(self.mGroupedDataList[index])
-        #print(self.listWidget.currentItem().text())
 
-        #theListWidget = self.sender()
-        #currentItem = theListWidget.currentItem()
-        #currentItemText = currentItem.text()
-        #currentItem.setBackground(QtGui.QColor('red'))
+    def resultListDoubleClickedItem(self, item):
+        self.viewIndex = -1
+        print(item.text())
+        print(self.resultListView.currentRow())
+        index = self.resultListView.currentRow()
+        print(index)
+
+    def detailedListOneClickedItem(self, item):
+        print("one clicked")
+        print(item.text())
+        index = self.detailedListView.currentRow()
+        #item.setBackground(QColor('red'))
+        print(index)
+        if (index < 4):
+            self.viewIndex = -1
+        else:
+            self.viewIndex = index - 4
+
 
     def __fileOpenBtn_clicked__(self):
-        self.selectedFileName = QFileDialog.getOpenFileName(self)
-        #print(self.selectedFileName[0])
+        options = QFileDialog.Options()
+        self.selectedFileName = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","CSV (쉼표로 분리) (*.csv)", options=options)
         self.mRawData = self.getDataFrameFromFile(self.selectedFileName[0])
-        #self.mFileName = 'C:/Company/0605/LGM-G600K_V10t_20170607_094951_Asia_Seoul.csv'
-        #self.selectedFileName[0] = self.mFileName;
-        #self.mRawData = self.getDataFrameFromFile(self.mFileName)
 
         self.makeData(self.mRawData)
         self.printResult()
         self.fileOpened = True
 
     def __summaryGraphBtn_clicked__(self):
-        if (self.fileOpened) :
-            self.mGraphManager.create_summary_graph(self.mThroughputResult, self.mMeasurementData)
+        if (self.fileOpened == False) :
+            self.showWarningDialog("먼저 CSV 파일을 선택하세요.      ")
         else:
-            QMessageBox.about(self, "Warning", "먼저 CSV 파일을 선택하세요.      ")
+            self.mGraphManager.create_summary_graph(self.mThroughputResult, self.mMeasurementData, self.mGroupedDataList, self.viewIndex)
 
     def __cpuTempUsageGraphBtn_clicked__(self):
-        if (self.fileOpened) :
-            self.mGraphManager.create_temperature_cpuusage_graph(self.mThroughputResult, self.mMeasurementData)
+        if (self.fileOpened == False) :
+            self.showWarningDialog("먼저 CSV 파일을 선택하세요.      ")
         else:
-            QMessageBox.about(self, "Warning", "먼저 CSV 파일을 선택하세요.      ")
+            self.mGraphManager.create_temperature_cpuusage_graph(self.mThroughputResult, self.mMeasurementData, self.mGroupedDataList, self.viewIndex)
 
 
     def __cpuClockGraphBtn_clicked__(self):
-        if (self.fileOpened) :
-            self.mGraphManager.create_cpuclock_graph(self.mThroughputResult, self.mMeasurementData)
+        if (self.fileOpened == False) :
+            self.showWarningDialog("먼저 CSV 파일을 선택하세요.      ")
         else:
-            QMessageBox.about(self, "Warning", "먼저 CSV 파일을 선택하세요.      ")
+            self.mGraphManager.create_cpuclock_graph(self.mThroughputResult, self.mMeasurementData, self.mGroupedDataList, self.viewIndex)
 
 
     def __cpuClockTempGraphBtn_clicked__(self):
-        if (self.fileOpened) :
-            self.mGraphManager.create_cpuclock_temperature_graph(self.mThroughputResult, self.mMeasurementData)
-        else:
-            QMessageBox.about(self, "Warning", "먼저 CSV 파일을 선택하세요.      ")
+        #if (self.fileOpened == False) :
+        self.showWarningDialog("먼저 CSV 파일을 선택하세요.      ")
+        #else:
+        #    self.mGraphManager.create_cpuclock_temperature_graph(self.mThroughputResult, self.mMeasurementData, self.mGroupedDataList, self.viewIndex)
 
+    def showWarningDialog(self, text):
+        QMessageBox.about(self, "Warning", text)
 
     def __close_myApp__(self):
         self.myApp.quit()
