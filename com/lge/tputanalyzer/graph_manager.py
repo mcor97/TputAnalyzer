@@ -391,7 +391,6 @@ class GraphManager :
             maxCpu = 'AvgMaxCpuFreq' + str(j - 1)
             cpuLabel = 'CPU' + str(j-1) + " Max Frequency"
             ax.plot(throughputResult.CallCount, throughputResult[maxCpu], label=cpuLabel)
-            print(maxCpu, ":", throughputResult[maxCpu])
 
         ax.legend()
         #plt.legend(['CPU0_MaxCpuFreq', 'CPU1_MaxCpuFreq'])
@@ -426,7 +425,6 @@ class GraphManager :
         plt.xlabel('Call Count', size=10)
         plt.ylabel('Throughput (Mbps) / Temperature (.C)', size=10)
         title = measurementData.Direction[0] + ' Throughput Result (Summary Graph)'
-        print(title)
         plt.title(title, size=20)
         plt.grid(True)
 

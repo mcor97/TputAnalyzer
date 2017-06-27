@@ -40,7 +40,6 @@ class TputManager :
 
     def convertToKorTime(self, dataFrame):
         time_gap = datetime.timedelta(hours=9)
-        print(time_gap)
         for i in numpy.arange(1, len(dataFrame.Time)):
             #print(dataFrame.Time[i-1])
             #print(time.gmtime(dataFrame.Time[i] / 1000))
@@ -60,7 +59,6 @@ class TputManager :
         groupedDataList = []
 
         callCount = dataFrame.max()['CallCnt']
-        print("call count max : ", callCount)
 
         for j in range(0, callCount):
             groupedData = dataFrame[dataFrame.CallCnt == (j + 1)]
@@ -84,7 +82,6 @@ class TputManager :
 
 
     def makeThroughputResult(self, groupedList, direction):
-        print("makeThroughputResult")
         throughputResult = pd.DataFrame(columns=(
             'CallCount', 'StartTime', 'EndTime', 'Throughput', 'MinTemperature', 'AvgTemperature', 'MaxTemperature',
             "MinCpuOccupancy", "AvgCpuOccupancy", "MaxCpuOccupancy",
@@ -121,19 +118,16 @@ class TputManager :
             for s in list(groupedList[0]):
                 if "CPU_CUR_Freq" in s:
                     cpuCount+= 1
-            print(cpuCount)
             throughputResult.loc[k] = [k + 1, startTime, endTime, througthput, minTemperature, avgTemperature, maxTemperature,
                                        minCpuOccupancy, avgCpuOccupancy, maxCpuOccupancy, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             for i in range (1, cpuCount+1):
                 cpu = 'CPU_CUR_Freq' + str(i-1)
                 addToColumn = 'AvgCurrentCpuFreq' + str(i-1)
                 throughputResult.loc[k, addToColumn] = round(groupedList[k][cpu].mean(), 0)
-                print( round(groupedList[k][cpu].mean(), 0))
 
             for i in range (1, cpuCount+1):
                 cpu = 'CPU_MAX_Freq' + str(i-1)
                 addToColumn = 'AvgMaxCpuFreq' + str(i-1)
                 throughputResult.loc[k, addToColumn] = round(groupedList[k].mean()[cpu],0)
-                print(round(groupedList[k][cpu].mean(), 0))
 
         return throughputResult
