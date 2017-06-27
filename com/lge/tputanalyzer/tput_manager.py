@@ -1,3 +1,4 @@
+#-*- encoding: utf-8 -*-
 import numpy
 import pandas as pd
 import time

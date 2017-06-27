@@ -1,3 +1,4 @@
+#-*- encoding: utf-8 -*-
 import file_parser
 import graph_manager
 import tput_manager
