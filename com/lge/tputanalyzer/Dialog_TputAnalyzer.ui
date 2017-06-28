@@ -16,12 +16,15 @@
   <property name="windowTitle">
    <string>TputAnalyzer</string>
   </property>
+  <property name="inputMethodHints">
+   <set>Qt::ImhNone</set>
+  </property>
   <widget class="QPushButton" name="fileOpenBtn">
    <property name="geometry">
     <rect>
-     <x>880</x>
+     <x>860</x>
      <y>20</y>
-     <width>111</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
@@ -29,8 +32,8 @@
     <font>
      <family>Trebuchet MS</family>
      <pointsize>10</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -62,74 +65,64 @@
      <x>800</x>
      <y>290</y>
      <width>201</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
      <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>T-put Summary Graph</string>
+    <string>T-put Result Graph</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cpuTempUsageGraphBtn">
    <property name="geometry">
     <rect>
      <x>800</x>
-     <y>340</y>
+     <y>410</y>
      <width>201</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
      <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>CPU 온도, CPU 사용량 Graph</string>
+    <string>CPU 온도, 사용량(%) Graph</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cpuClockGraphBtn">
    <property name="geometry">
     <rect>
      <x>800</x>
-     <y>390</y>
+     <y>350</y>
      <width>201</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
      <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
     <string>CPU Clock Graph</string>
    </property>
-  </widget>
-  <widget class="QPushButton" name="cpuClockTempGraphBtn">
-   <property name="geometry">
-    <rect>
-     <x>800</x>
-     <y>440</y>
-     <width>201</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Trebuchet MS</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>CPU Clock - CPU 온도 Graph</string>
+   <property name="shortcut">
+    <string extracomment="설명이에요"/>
    </property>
   </widget>
   <widget class="QLabel" name="OrganizationLabel_2">
@@ -157,7 +150,7 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="text">
-    <string>Test Result Summary</string>
+    <string>Overall Result</string>
    </property>
   </widget>
   <widget class="QLabel" name="OrganizationLabel_3">
@@ -185,7 +178,175 @@
     <enum>Qt::ClickFocus</enum>
    </property>
    <property name="text">
-    <string>Detailed Test Result</string>
+    <string>Detailed Result</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_4">
+   <property name="geometry">
+    <rect>
+     <x>801</x>
+     <y>510</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>* Overall Result 의 내용 선택</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_5">
+   <property name="geometry">
+    <rect>
+     <x>801</x>
+     <y>530</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>  -&gt; Graph 생성 버튼 클릭</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_6">
+   <property name="geometry">
+    <rect>
+     <x>801</x>
+     <y>550</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>  -&gt; 전체 데이터의 Graph 표시됨</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_7">
+   <property name="geometry">
+    <rect>
+     <x>801</x>
+     <y>600</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>* Detailed Result 의 내용 선택</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_8">
+   <property name="geometry">
+    <rect>
+     <x>801</x>
+     <y>620</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>  -&gt; Graph 생성 버튼 클릭</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OrganizationLabel_9">
+   <property name="geometry">
+    <rect>
+     <x>801</x>
+     <y>640</y>
+     <width>201</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Trebuchet MS</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="text">
+    <string>  -&gt; 회차별 데이터의 Graph 표시됨</string>
    </property>
   </widget>
  </widget>

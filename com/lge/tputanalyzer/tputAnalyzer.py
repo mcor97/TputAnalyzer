@@ -104,13 +104,6 @@ class TputAnalyzer(QMainWindow, form_class):
         self.resultListView.addItem("   - 평균 : " + str(meanThroughput) + " Mbps,   최대 : " + str(maxThroughput) + " Mbps,   최소 : " + str(minThroughput) + " Mbps")
         self.resultListView.addItem("   - 표준편차 : " + str(stdThroughput) + ",   분산 : " + str(varThroughput))
 
-        self.detailedListView.addItem("======== 전체 평균 ========")
-        item = QListWidgetItem("  - T-put : " + str(meanThroughput) + " Mbps\tCPU 온도 : " + str(meanTemperature))
-        item.setBackground(QColor('blue'))
-        item.setForeground(QColor('white'))
-        self.detailedListView.addItem(item)
-        self.detailedListView.addItem("")
-        self.detailedListView.addItem("======= 회차별 평균 =======")
         num_bars = len(self.mThroughputResult.Throughput)
         cpuCount = 0
         for s in list(self.mMeasurementData):
@@ -118,15 +111,24 @@ class TputAnalyzer(QMainWindow, form_class):
                 cpuCount += 1
 
         for i in range(1, num_bars + 1):
-            itemString = "<" + str(i) + " 회차>\n\tT-put : " + str(numpy.round(self.mThroughputResult.Throughput[i - 1], 1)) + " Mbps,\tCPU 온도 : " + str(numpy.round(self.mThroughputResult.AvgTemperature[i - 1], 2)) + "\tCPU 점유율(%) : " + str(numpy.round(self.mThroughputResult.AvgCpuOccupancy[i - 1], 2)) + "\n\t"
+            itemString = "<" + str(i) + " 회차>"
+            if (self.mThroughputResult.Throughput[i - 1] == maxThroughput):
+                itemString += "\t<최대>"
+            elif (self.mThroughputResult.Throughput[i - 1] == minThroughput):
+                itemString += "\t<최소>"
+            elif (self.mThroughputResult.Throughput[i - 1] < meanThroughput):
+                itemString += "\t<평균 이하>"
+            itemString += "\n\tT-put : " + str(numpy.round(self.mThroughputResult.Throughput[i - 1], 1)) + " Mbps,\tCPU 온도 : " + str(numpy.round(self.mThroughputResult.AvgTemperature[i - 1], 2)) + "\tCPU 점유율(%) : " + str(numpy.round(self.mThroughputResult.AvgCpuOccupancy[i - 1], 2)) + "\n\t"
             for j in range(1, cpuCount + 1):
                 maxCpu = 'AvgMaxCpuFreq' + str(j - 1)
-                itemString += "CPU" + str(j - 1) + "_Freq : " + str(numpy.round(self.mThroughputResult[maxCpu][i - 1],0)) + "KHz\t"
+                itemString += "CPU" + str(j - 1) + "_Freq : " + str(numpy.round(self.mThroughputResult[maxCpu][i - 1],0)) + "MHz\t"
             item = QListWidgetItem(itemString)
             if (self.mThroughputResult.Throughput[i - 1] < meanThroughput):
                 item.setBackground(QColor('yellow'))
             if (self.mThroughputResult.Throughput[i - 1] == minThroughput):
                 item.setBackground(QColor('red'))
+            if (self.mThroughputResult.Throughput[i - 1] == maxThroughput):
+                item.setBackground(QColor('green'))
             self.detailedListView.addItem(item)
 
     def resultListOneClickedItem(self, item):
@@ -135,18 +137,13 @@ class TputAnalyzer(QMainWindow, form_class):
 
 
     def detailedListOneClickedItem(self, item):
-        index = self.detailedListView.currentRow()
-        #item.setBackground(QColor('red'))
-        if (index < 4):
-            self.viewIndex = -1
-        else:
-            self.viewIndex = index - 4
+        self.viewIndex = self.detailedListView.currentRow()
 
 
     def __fileOpenBtn_clicked__(self):
-        self.fileOpened = False
+
         options = QFileDialog.Options()
-        self.selectedFileName = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","CSV (쉼표로 분리) (*.csv)", options=options)
+        self.selectedFileName = QFileDialog.getOpenFileName(self,"CSV File Open", "","CSV (쉼표로 분리) (*.csv)", options=options)
         print(self.selectedFileName[0])
         if (self.selectedFileName[0]):
             self.mRawData = self.getDataFrameFromFile(self.selectedFileName[0])
