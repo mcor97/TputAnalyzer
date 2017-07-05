@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1031</width>
-    <height>908</height>
+    <height>941</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -63,7 +63,7 @@
    <property name="geometry">
     <rect>
      <x>800</x>
-     <y>290</y>
+     <y>320</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -77,14 +77,14 @@
     </font>
    </property>
    <property name="text">
-    <string>T-put Result Graph</string>
+    <string>Overall Result Graph</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cpuTempUsageGraphBtn">
    <property name="geometry">
     <rect>
      <x>800</x>
-     <y>410</y>
+     <y>440</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -105,7 +105,7 @@
    <property name="geometry">
     <rect>
      <x>800</x>
-     <y>350</y>
+     <y>380</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -137,7 +137,7 @@
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
-     <pointsize>11</pointsize>
+     <pointsize>14</pointsize>
      <weight>75</weight>
      <italic>true</italic>
      <bold>true</bold>
@@ -157,7 +157,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>270</y>
+     <y>300</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -165,7 +165,7 @@
    <property name="font">
     <font>
      <family>Trebuchet MS</family>
-     <pointsize>11</pointsize>
+     <pointsize>14</pointsize>
      <weight>75</weight>
      <italic>true</italic>
      <bold>true</bold>
@@ -185,7 +185,7 @@
    <property name="geometry">
     <rect>
      <x>801</x>
-     <y>510</y>
+     <y>540</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -213,7 +213,7 @@
    <property name="geometry">
     <rect>
      <x>801</x>
-     <y>530</y>
+     <y>560</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -241,7 +241,7 @@
    <property name="geometry">
     <rect>
      <x>801</x>
-     <y>550</y>
+     <y>580</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -269,7 +269,7 @@
    <property name="geometry">
     <rect>
      <x>801</x>
-     <y>600</y>
+     <y>630</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -297,7 +297,7 @@
    <property name="geometry">
     <rect>
      <x>801</x>
-     <y>620</y>
+     <y>650</y>
      <width>201</width>
      <height>16</height>
     </rect>
@@ -325,7 +325,7 @@
    <property name="geometry">
     <rect>
      <x>801</x>
-     <y>640</y>
+     <y>670</y>
      <width>201</width>
      <height>16</height>
     </rect>

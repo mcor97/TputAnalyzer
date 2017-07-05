@@ -29,10 +29,10 @@ class TputAnalyzer(QMainWindow, form_class):
         self.cpuTempUsageGraphBtn.clicked.connect(self.__cpuTempUsageGraphBtn_clicked__)
         self.cpuClockGraphBtn.clicked.connect(self.__cpuClockGraphBtn_clicked__)
         self.resultListView = QListWidget(self)
-        self.resultListView.setGeometry(30, 60, 980, 190)
+        self.resultListView.setGeometry(30, 60, 980, 220)
         self.resultListView.itemClicked.connect(self.resultListOneClickedItem)
         self.detailedListView = QListWidget(self)
-        self.detailedListView.setGeometry(30, 290, 750, 600)
+        self.detailedListView.setGeometry(30, 320, 750, 600)
         self.detailedListView.itemClicked.connect(self.detailedListOneClickedItem)
 
         self.fileOpened = False
@@ -101,14 +101,26 @@ class TputAnalyzer(QMainWindow, form_class):
 
         meanTemperature = numpy.round(self.mThroughputResult.AvgTemperature.mean(), 1)
 
-        self.resultListView.addItem("   - 평균 : " + str(meanThroughput) + " Mbps,   최대 : " + str(maxThroughput) + " Mbps,   최소 : " + str(minThroughput) + " Mbps")
-        self.resultListView.addItem("   - 표준편차 : " + str(stdThroughput) + ",   분산 : " + str(varThroughput))
-
-        num_bars = len(self.mThroughputResult.Throughput)
         cpuCount = 0
         for s in list(self.mMeasurementData):
             if "CPU_CUR_Freq" in s:
                 cpuCount += 1
+
+        self.resultListView.addItem("   - T-put :\t평균 : " + str(meanThroughput) + " Mbps\t최대 : " + str(maxThroughput) + " Mbps\t최소 : " + str(minThroughput) + " Mbps\t표준편차 : " + str(stdThroughput))
+        startItemString = "   - CPU Clock (시작) : "
+        endItemString = "   - CPU Clock (종료)  :"
+
+        for j in range(1, cpuCount + 1):
+            maxCpu = 'CPU_MAX_Freq' + str(j - 1)
+            startItemString += "CPU" + str(j - 1) + "_Freq : " + str(numpy.round(self.mMeasurementData.head(1)[maxCpu].values, 0)) + "MHz\t"
+            endItemString += "CPU" + str(j - 1) + "_Freq : " + str(numpy.round(self.mMeasurementData.tail(1)[maxCpu].values, 0)) + "MHz\t"
+        self.resultListView.addItem(startItemString)
+        self.resultListView.addItem(endItemString)
+
+        self.resultListView.addItem("   - CPU 온도 (시작) : " + str(self.mMeasurementData.head(1).Temperature.values) + "\n   - CPU 온도 (종료) : " + str(self.mMeasurementData.tail(1).Temperature.values))
+
+        num_bars = len(self.mThroughputResult.Throughput)
+
 
         for i in range(1, num_bars + 1):
             itemString = "<" + str(i) + " 회차>"

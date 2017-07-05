@@ -5,6 +5,7 @@ import numpy
 
 #DISPLAY_DETAIL_DATA = True
 DISPLAY_DETAIL_DATA = False
+DISPLAY_DELTA = 5
 
 
 class GraphManager :
@@ -22,14 +23,14 @@ class GraphManager :
             dontDisplayData = False
             for k in range(1, num_bars + 1):
                 if (DISPLAY_DETAIL_DATA == False) :
-                    if (k < num_bars and dontDisplayData == False and measurementData.Throughput[k - 1] != 0):
-                        plt.text(measurementData.Time[k],
-                                 numpy.round(measurementData.Throughput[k], 0),
-                                 numpy.round(measurementData.Throughput[k], 0), ha='center', va='bottom',
+                    if (k < num_bars + DISPLAY_DELTA and dontDisplayData == False and measurementData.Throughput[k - 1] != 0):
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0),
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
                                  color='blue', size=8)
-                        plt.text(measurementData.Time[k],
-                                 numpy.round(measurementData.Temperature[k], 0) * alignValue,
-                                 numpy.round(measurementData.Temperature[k], 0), ha='center', va='bottom',
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
+                                 numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0) * alignValue,
+                                 numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
                                  color='green', size=8)
                         dontDisplayData = True
 
@@ -75,14 +76,14 @@ class GraphManager :
             dontDisplayData = False
             for k in range(1, num_bars + 1):
                 if (DISPLAY_DETAIL_DATA == False) :
-                    if (k < num_bars and dontDisplayData == False and measurementData.Throughput[k - 1] != 0):
-                        plt.text(measurementData.Time[k],
-                                 numpy.round(measurementData.Throughput[k], 0),
-                                 numpy.round(measurementData.Throughput[k], 0), ha='center', va='bottom',
+                    if (k < num_bars + DISPLAY_DELTA and dontDisplayData == False and measurementData.Throughput[k - 1] != 0):
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0),
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
                                  color='blue', size=8)
-                        plt.text(measurementData.Time[k],
-                                 numpy.round(measurementData['CPU_Usage(%)'][k], 0) * alignValue,
-                                 numpy.round(measurementData['CPU_Usage(%)'][k], 0), ha='center', va='bottom',
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
+                                 numpy.round(measurementData['CPU_Usage(%)'][k + DISPLAY_DELTA], 0) * alignValue,
+                                 numpy.round(measurementData['CPU_Usage(%)'][k + DISPLAY_DELTA], 0), ha='center', va='bottom',
                                  color='green', size=8)
                         dontDisplayData = True
 
@@ -135,31 +136,42 @@ class GraphManager :
             plt.plot(groupedList[index].Time, groupedList[index].Temperature * alignValue)
 
             for k in range(1, num_bars + 1):
-                if (k < num_bars and groupedList[index].iloc[k-1].Throughput < groupedList[index].Throughput.mean()):
-                    if (k > 2) :
-                        plt.text(groupedList[index].iloc[k - 2].Time,
-                                 numpy.round(groupedList[index].iloc[k - 2].Throughput, 0),
-                                 numpy.round(groupedList[index].iloc[k - 2].Throughput, 0), ha='center',
-                                 va='bottom', color='blue', size=8)
-
+                if (DISPLAY_DETAIL_DATA == False) :
                     plt.text(groupedList[index].iloc[k - 1].Time,
                              numpy.round(groupedList[index].iloc[k - 1].Throughput, 0),
                              numpy.round(groupedList[index].iloc[k - 1].Throughput, 0), ha='center', va='bottom',
                              color='blue', size=8)
-                    plt.text(groupedList[index].iloc[k].Time,
-                             numpy.round(groupedList[index].iloc[k].Throughput, 0),
-                             numpy.round(groupedList[index].iloc[k].Throughput, 0), ha='center', va='bottom',
-                             color='blue', size=8)
-
-                if (k == 1 or (k < num_bars and groupedList[index].iloc[k-1].Temperature != groupedList[index].iloc[k].Temperature)):
                     plt.text(groupedList[index].iloc[k - 1].Time,
                              numpy.round(groupedList[index].iloc[k - 1].Temperature, 0) * alignValue,
                              numpy.round(groupedList[index].iloc[k - 1].Temperature, 0), ha='center', va='bottom',
                              color='green', size=8)
-                    plt.text(groupedList[index].iloc[k].Time,
-                             numpy.round(groupedList[index].iloc[k].Temperature, 0) * alignValue,
-                             numpy.round(groupedList[index].iloc[k].Temperature, 0), ha='center', va='bottom',
-                             color='green', size=8)
+
+                else :
+                    if (k < num_bars and groupedList[index].iloc[k-1].Throughput < groupedList[index].Throughput.mean()):
+                        if (k > 2) :
+                            plt.text(groupedList[index].iloc[k - 2].Time,
+                                     numpy.round(groupedList[index].iloc[k - 2].Throughput, 0),
+                                     numpy.round(groupedList[index].iloc[k - 2].Throughput, 0), ha='center',
+                                     va='bottom', color='blue', size=8)
+
+                        plt.text(groupedList[index].iloc[k - 1].Time,
+                                 numpy.round(groupedList[index].iloc[k - 1].Throughput, 0),
+                                 numpy.round(groupedList[index].iloc[k - 1].Throughput, 0), ha='center', va='bottom',
+                                 color='blue', size=8)
+                        plt.text(groupedList[index].iloc[k].Time,
+                                 numpy.round(groupedList[index].iloc[k].Throughput, 0),
+                                 numpy.round(groupedList[index].iloc[k].Throughput, 0), ha='center', va='bottom',
+                                 color='blue', size=8)
+
+                    if (k == 1 or (k < num_bars and groupedList[index].iloc[k-1].Temperature != groupedList[index].iloc[k].Temperature)):
+                        plt.text(groupedList[index].iloc[k - 1].Time,
+                                 numpy.round(groupedList[index].iloc[k - 1].Temperature, 0) * alignValue,
+                                 numpy.round(groupedList[index].iloc[k - 1].Temperature, 0), ha='center', va='bottom',
+                                 color='green', size=8)
+                        plt.text(groupedList[index].iloc[k].Time,
+                                 numpy.round(groupedList[index].iloc[k].Temperature, 0) * alignValue,
+                                 numpy.round(groupedList[index].iloc[k].Temperature, 0), ha='center', va='bottom',
+                                 color='green', size=8)
 
             plt.title('Throughput - Temperature Graph', size=20)
             plt.ylabel('Throughput (Mbps) / Temperature (.C)', size=10)
@@ -174,34 +186,45 @@ class GraphManager :
 
 
             for k in range(1, num_bars + 1):
-                if (k < num_bars and groupedList[index].iloc[k - 1].Throughput < groupedList[index].Throughput.mean()):
-                    if (k > 2):
-                        plt.text(groupedList[index].iloc[k - 2].Time,
-                                 numpy.round(groupedList[index].iloc[k - 2].Throughput, 0),
-                                 numpy.round(groupedList[index].iloc[k - 2].Throughput, 0), ha='center',
-                                 va='bottom', color='blue', size=8)
-
+                if (DISPLAY_DETAIL_DATA == False):
                     plt.text(groupedList[index].iloc[k - 1].Time,
                              numpy.round(groupedList[index].iloc[k - 1].Throughput, 0),
                              numpy.round(groupedList[index].iloc[k - 1].Throughput, 0), ha='center', va='bottom',
                              color='blue', size=8)
-                    plt.text(groupedList[index].iloc[k].Time,
-                             numpy.round(groupedList[index].iloc[k].Throughput, 0),
-                             numpy.round(groupedList[index].iloc[k].Throughput, 0), ha='center', va='bottom',
-                             color='blue', size=8)
-
-                if (k < num_bars and (groupedList[index].iloc[k - 1]['CPU_Usage(%)'] == groupedList[index]['CPU_Usage(%)'].max() or
-                                              groupedList[index].iloc[k - 1]['CPU_Usage(%)'] == groupedList[index]['CPU_Usage(%)'].min())):
                     plt.text(groupedList[index].iloc[k - 1].Time,
                              numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0) * alignValue,
                              numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0), ha='center', va='bottom',
                              color='green', size=8)
 
-                if (k == 1 or ((k % 10) == 0)):
-                    plt.text(groupedList[index].iloc[k - 1].Time,
-                             numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0) * alignValue,
-                             numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0), ha='center', va='bottom',
-                             color='green', size=8)
+                else :
+                    if (k < num_bars and groupedList[index].iloc[k - 1].Throughput < groupedList[index].Throughput.mean()):
+                        if (k > 2):
+                            plt.text(groupedList[index].iloc[k - 2].Time,
+                                     numpy.round(groupedList[index].iloc[k - 2].Throughput, 0),
+                                     numpy.round(groupedList[index].iloc[k - 2].Throughput, 0), ha='center',
+                                     va='bottom', color='blue', size=8)
+
+                        plt.text(groupedList[index].iloc[k - 1].Time,
+                                 numpy.round(groupedList[index].iloc[k - 1].Throughput, 0),
+                                 numpy.round(groupedList[index].iloc[k - 1].Throughput, 0), ha='center', va='bottom',
+                                 color='blue', size=8)
+                        plt.text(groupedList[index].iloc[k].Time,
+                                 numpy.round(groupedList[index].iloc[k].Throughput, 0),
+                                 numpy.round(groupedList[index].iloc[k].Throughput, 0), ha='center', va='bottom',
+                                 color='blue', size=8)
+
+                    if (k < num_bars and (groupedList[index].iloc[k - 1]['CPU_Usage(%)'] == groupedList[index]['CPU_Usage(%)'].max() or
+                                                  groupedList[index].iloc[k - 1]['CPU_Usage(%)'] == groupedList[index]['CPU_Usage(%)'].min())):
+                        plt.text(groupedList[index].iloc[k - 1].Time,
+                                 numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0) * alignValue,
+                                 numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0), ha='center', va='bottom',
+                                 color='green', size=8)
+
+                    if (k == 1 or ((k % 10) == 0)):
+                        plt.text(groupedList[index].iloc[k - 1].Time,
+                                 numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0) * alignValue,
+                                 numpy.round(groupedList[index].iloc[k - 1]['CPU_Usage(%)'], 0), ha='center', va='bottom',
+                                 color='green', size=8)
 
             # plt.xlabel('time (ms)', size=10)
             plt.title('Throughput - CPU Usage Graph', size=20)
@@ -253,16 +276,16 @@ class GraphManager :
                 dontDisplayData = False
                 for k in range(1, num_bars + 1):
                     if (DISPLAY_DETAIL_DATA == False):
-                        if (k < num_bars and dontDisplayData == False and measurementData.Throughput[k - 1] != 0) :
-                            plt.text(measurementData.Time[k], measurementData[maxCpu][k - 1],
-                                     measurementData[maxCpu][k],
+                        if (k < num_bars + DISPLAY_DELTA and dontDisplayData == False and measurementData.Throughput[k - 1] != 0) :
+                            plt.text(measurementData.Time[k + DISPLAY_DELTA], measurementData[maxCpu][k + DISPLAY_DELTA],
+                                     measurementData[maxCpu][k] + DISPLAY_DELTA,
                                      ha='center', va='bottom', color='r', size=8)
-                            plt.text(measurementData.Time[k], measurementData[currentCpu][k - 1],
-                                     measurementData[currentCpu][k],
+                            plt.text(measurementData.Time[k + DISPLAY_DELTA], measurementData[currentCpu][k + DISPLAY_DELTA],
+                                     measurementData[currentCpu][k] + DISPLAY_DELTA,
                                      ha='center', va='bottom', color='purple', size=8)
-                            plt.text(measurementData.Time[k],
-                                     numpy.round(measurementData.Temperature[k], 0) * alignValue,
-                                     numpy.round(measurementData.Temperature[k], 0), ha='center', va='bottom',
+                            plt.text(measurementData.Time[k + DISPLAY_DELTA],
+                                     numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0) * alignValue,
+                                     numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
                                      color='green', size=8)
                             dontDisplayData = True
 
@@ -413,7 +436,7 @@ class GraphManager :
 
         num_bars = len(throughputResult.Throughput)
         plt.bar(throughputResult.CallCount, throughputResult.Throughput * alignTputValue, align='center',width=0.5, facecolor='#9999ff', edgecolor='white', label='Throughput')  ## 세로 막대
-        plt.plot(throughputResult.CallCount, throughputResult.AvgTemperature * alignTemperatureValue)  ## 세로 막대
+        plt.plot(throughputResult.CallCount, throughputResult.AvgTemperature * alignTemperatureValue, label='Temperature')  ## 세로 막대
 
         for j in range(1, cpuCount + 1):
             maxCpu = 'AvgMaxCpuFreq' + str(j - 1)
@@ -422,34 +445,40 @@ class GraphManager :
 
         ax.legend()
 
-        for k in range(1, num_bars + 1):
-            if (throughputResult.Throughput[k - 1] == throughputResult.Throughput.max()):
-                plt.text(k, throughputResult.Throughput[k - 1] * alignTputValue, throughputResult.Throughput[k - 1], ha='center', va='bottom', color='r')
+        for k in range(0, num_bars):
+            xAxisValue = k + 1
+            if (k == 0):
+                plt.text(xAxisValue, throughputResult.Throughput[k] * alignTputValue, throughputResult.Throughput[k],
+                         ha='center', va='bottom', color='r')
+                plt.text(xAxisValue, round(throughputResult.AvgTemperature[k], 0) * alignTemperatureValue,
+                         round(throughputResult.AvgTemperature[k], 0), ha='center', va='bottom', color='r')
 
-            if (throughputResult.Throughput[k - 1] == throughputResult.Throughput.min()):
-                plt.text(k, throughputResult.Throughput[k - 1] * alignTputValue, throughputResult.Throughput[k - 1], ha='center', va='bottom', color='r')
-
-            if (k < num_bars and round(throughputResult.AvgTemperature[k - 1]) != round(throughputResult.AvgTemperature[k])):
-                plt.text(k, round(throughputResult.AvgTemperature[k - 1],0) * alignTemperatureValue, round(throughputResult.AvgTemperature[k - 1],0), ha='center', va='bottom', color='r')
 
             if (num_bars > 100):
-                if (throughputResult.Throughput[k - 1] < throughputResult.Throughput.mean()):
-                    plt.text(k, throughputResult.Throughput[k - 1] * alignTputValue, throughputResult.Throughput[k - 1], ha='center', va='bottom')
-                    plt.text(k, round(throughputResult.AvgTemperature[k - 1], 0) * alignTemperatureValue, round(throughputResult.AvgTemperature[k - 1], 0), ha='center', va='bottom')
+                if (throughputResult.Throughput[k] < throughputResult.Throughput.mean()):
+                    plt.text(xAxisValue, throughputResult.Throughput[k] * alignTputValue, throughputResult.Throughput[k], ha='center', va='bottom')
             else:
-                plt.text(k, throughputResult.Throughput[k - 1] * alignTputValue, throughputResult.Throughput[k - 1], ha='center', va='bottom')
-                plt.text(k, round(throughputResult.AvgTemperature[k - 1], 0) * alignTemperatureValue, round(throughputResult.AvgTemperature[k - 1], 0), ha='center', va='bottom')
+                plt.text(xAxisValue, throughputResult.Throughput[k] * alignTputValue, throughputResult.Throughput[k], ha='center', va='bottom')
+                plt.text(xAxisValue, round(throughputResult.AvgTemperature[k], 0) * alignTemperatureValue, round(throughputResult.AvgTemperature[k], 0), ha='center', va='bottom')
+
+            if (xAxisValue < num_bars and round(throughputResult.AvgTemperature[k]) != round(throughputResult.AvgTemperature[k + 1])):
+                plt.text(xAxisValue + 1, round(throughputResult.AvgTemperature[k + 1],0) * alignTemperatureValue, round(throughputResult.AvgTemperature[k + 1],0), ha='center', va='bottom', color='r')
+
+            if (throughputResult.Throughput[k] == throughputResult.Throughput.max() or
+                        throughputResult.Throughput[k] == throughputResult.Throughput.min() or
+                        throughputResult.Throughput[k] == throughputResult.Throughput.mean()):
+                plt.text(xAxisValue, throughputResult.Throughput[k] * alignTputValue, throughputResult.Throughput[k], ha='center', va='bottom', color='red')
 
             for j in range(1, cpuCount + 1):
                 maxCpu = 'AvgMaxCpuFreq' + str(j - 1)
-                if (k == 1):
-                    plt.text(k, throughputResult[maxCpu][k-1], throughputResult[maxCpu][k-1], ha='center', va='bottom')
-                if (k < num_bars and throughputResult[maxCpu][k - 1] != throughputResult[maxCpu][k]):
-                    plt.text(k, throughputResult[maxCpu][k], throughputResult[maxCpu][k], ha='center', va='bottom')
+                if (k == 0):
+                    plt.text(xAxisValue, throughputResult[maxCpu][k], throughputResult[maxCpu][k], ha='center', va='bottom', color='red')
+                if (xAxisValue < num_bars and throughputResult[maxCpu][k] != throughputResult[maxCpu][k + 1]):
+                    plt.text(xAxisValue + 1, throughputResult[maxCpu][k + 1], throughputResult[maxCpu][k + 1], ha='center', va='bottom', color='red')
 
         plt.xlabel('Call Count', size=10)
-        plt.ylabel('Throughput (Mbps) / Temperature (.C) / CPU ', size=10)
-        title = measurementData.Direction[0] + ' Throughput Result (Summary Graph)'
+        plt.ylabel('Throughput (Mbps) / Temperature (.C) / CPU Clock (MHz)', size=10)
+        title = measurementData.Direction[0] + ' Overall Result Graph'
         plt.title(title, size=20)
         plt.grid(True)
 
