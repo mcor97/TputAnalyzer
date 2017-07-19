@@ -13,7 +13,7 @@ import time
 form_class = uic.loadUiType("Dialog_TputAnalyzer.ui")[0]
 
 DBG = False
-#DGB = True
+#DBG = True
 
 class TputAnalyzer(QMainWindow, form_class):
     def __init__(self):
