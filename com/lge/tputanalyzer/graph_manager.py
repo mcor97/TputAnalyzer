@@ -24,13 +24,13 @@ class GraphManager :
             for k in range(1, num_bars + 1):
                 if (DISPLAY_DETAIL_DATA == False) :
                     if (k < num_bars + DISPLAY_DELTA and dontDisplayData == False and measurementData.Throughput[k - 1] != 0):
-                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
-                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0),
-                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA - 1],
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA - 1], 0),
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA - 1], 0), ha='center', va='bottom',
                                  color='blue', size=8)
-                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
-                                 numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0) * alignValue,
-                                 numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA - 1],
+                                 numpy.round(measurementData.Temperature[k + DISPLAY_DELTA - 1], 0) * alignValue,
+                                 numpy.round(measurementData.Temperature[k + DISPLAY_DELTA - 1], 0), ha='center', va='bottom',
                                  color='green', size=8)
                         dontDisplayData = True
 
@@ -77,13 +77,13 @@ class GraphManager :
             for k in range(1, num_bars + 1):
                 if (DISPLAY_DETAIL_DATA == False) :
                     if (k < num_bars + DISPLAY_DELTA and dontDisplayData == False and measurementData.Throughput[k - 1] != 0):
-                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
-                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0),
-                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA - 1],
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA - 1], 0),
+                                 numpy.round(measurementData.Throughput[k + DISPLAY_DELTA - 1], 0), ha='center', va='bottom',
                                  color='blue', size=8)
-                        plt.text(measurementData.Time[k + DISPLAY_DELTA],
-                                 numpy.round(measurementData['CPU_Usage(%)'][k + DISPLAY_DELTA], 0) * alignValue,
-                                 numpy.round(measurementData['CPU_Usage(%)'][k + DISPLAY_DELTA], 0), ha='center', va='bottom',
+                        plt.text(measurementData.Time[k + DISPLAY_DELTA - 1],
+                                 numpy.round(measurementData['CPU_Usage(%)'][k + DISPLAY_DELTA - 1], 0) * alignValue,
+                                 numpy.round(measurementData['CPU_Usage(%)'][k + DISPLAY_DELTA - 1], 0), ha='center', va='bottom',
                                  color='green', size=8)
                         dontDisplayData = True
 
@@ -277,15 +277,15 @@ class GraphManager :
                 for k in range(1, num_bars + 1):
                     if (DISPLAY_DETAIL_DATA == False):
                         if (k < num_bars + DISPLAY_DELTA and dontDisplayData == False and measurementData.Throughput[k - 1] != 0) :
-                            plt.text(measurementData.Time[k + DISPLAY_DELTA], measurementData[maxCpu][k + DISPLAY_DELTA],
-                                     measurementData[maxCpu][k] + DISPLAY_DELTA,
+                            plt.text(measurementData.Time[k + DISPLAY_DELTA - 1], measurementData[maxCpu][k + DISPLAY_DELTA - 1],
+                                     measurementData[maxCpu][k + DISPLAY_DELTA - 1],
                                      ha='center', va='bottom', color='r', size=8)
-                            plt.text(measurementData.Time[k + DISPLAY_DELTA], measurementData[currentCpu][k + DISPLAY_DELTA],
-                                     measurementData[currentCpu][k] + DISPLAY_DELTA,
+                            plt.text(measurementData.Time[k + DISPLAY_DELTA - 1], measurementData[currentCpu][k + DISPLAY_DELTA - 1],
+                                     measurementData[currentCpu][k + DISPLAY_DELTA - 1],
                                      ha='center', va='bottom', color='purple', size=8)
-                            plt.text(measurementData.Time[k + DISPLAY_DELTA],
-                                     numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0) * alignValue,
-                                     numpy.round(measurementData.Temperature[k + DISPLAY_DELTA], 0), ha='center', va='bottom',
+                            plt.text(measurementData.Time[k + DISPLAY_DELTA - 1],
+                                     numpy.round(measurementData.Temperature[k + DISPLAY_DELTA - 1], 0) * alignValue,
+                                     numpy.round(measurementData.Temperature[k + DISPLAY_DELTA - 1], 0), ha='center', va='bottom',
                                      color='green', size=8)
                             dontDisplayData = True
 
