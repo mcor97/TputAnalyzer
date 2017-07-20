@@ -65,18 +65,21 @@ class TputManager :
 
             length = len(groupedData.Throughput)
             for m in numpy.arange(0, length - 2):
-                if (groupedData.iloc[0]['Throughput'] < 1 and groupedData.iloc[1]['Throughput'] < 1 ):
+                if (groupedData.iloc[0]['Throughput'] < 0.1 and groupedData.iloc[1]['Throughput'] < 0.1 ):
                     groupedData = groupedData.drop(groupedData.index[0])
                 else:
                     break
 
             for m in numpy.arange(0, length - 2):
-                if (groupedData.iloc[-1]['Throughput'] < 1):
+                if (groupedData.iloc[-1]['Throughput'] < 0.1):
                     groupedData = groupedData.drop(groupedData.index[-1])
                 else:
                     break
 
-            groupedDataList.append(groupedData)
+            if (groupedData.empty) :
+                print("do not add")
+            else :
+                groupedDataList.append(groupedData)
 
         return groupedDataList
 
